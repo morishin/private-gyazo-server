@@ -7,8 +7,8 @@ module Gyazo
   class Controller < Sinatra::Base
 
     configure do
-      set :image_dir, 'public/images'
-      set :image_url, 'http://localhost:4567/images'
+      set :image_dir, 'public'
+      set :image_url, 'http://localhost:4567'
       set :access_token, ''
     end
 

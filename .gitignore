@@ -1,5 +1,4 @@
-db/*
-public/images/*
+public/*
 !.keep
 
 # Created by https://www.gitignore.io
