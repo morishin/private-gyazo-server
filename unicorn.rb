@@ -8,5 +8,5 @@ listen "/tmp/.unicorn.sock"
 
 pid "/tmp/unicorn.pid"
 
-stderr_path "#{@dir}log/unicorn.stderr.log"
-stdout_path "#{@dir}log/unicorn.stdout.log"
+stderr_path "/var/log/unicorn/unicorn.stderr.log"
+stdout_path "/var/log/unicorn/unicorn.stdout.log"
