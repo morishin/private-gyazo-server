@@ -8,7 +8,7 @@ module Gyazo
 
     configure do
       set :image_dir, 'public'
-      set :image_url, 'http://localhost:4567'
+      set :image_url, 'http://g.morishin.me'
       set :access_token, ''
     end
 
