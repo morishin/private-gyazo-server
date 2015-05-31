@@ -2,14 +2,16 @@ require 'sinatra'
 require 'rack'
 require 'digest/md5'
 require 'sdbm'
+require 'dotenv'
 
 module Gyazo
   class Controller < Sinatra::Base
+    Dotenv.load
 
     configure do
       set :image_dir, 'public'
       set :image_url, 'http://g.morishin.me'
-      set :access_token, ''
+      set :access_token, ENV['ACCESS_TOKEN']
     end
 
     post '/' do

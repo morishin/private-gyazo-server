@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    dotenv (2.0.1)
     kgio (2.9.3)
     rack (1.6.1)
     rack-protection (1.5.3)
@@ -20,6 +21,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
   rack
   sinatra
   unicorn
+
+BUNDLED WITH
+   1.10.2
