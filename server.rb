@@ -4,6 +4,7 @@ require 'digest/md5'
 require 'sdbm'
 require 'dotenv'
 require 'mysql2-cs-bind'
+require 'json'
 
 module Gyazo
   class Controller < Sinatra::Base
@@ -26,20 +27,30 @@ module Gyazo
       end
     end
 
-    post '/' do
-      auth = request.env["HTTP_AUTHORIZATION"]
-      if auth != "Bearer " + options.access_token then
+    post '/upload' do
+      auth = request.env['HTTP_AUTHORIZATION']
+      if auth != 'Bearer ' + options.access_token then
         return status 403
       end
 
       id = request[:id]
       data = request[:imagedata][:tempfile].read
       hash = Digest::MD5.hexdigest(data).to_s
-      File.open("#{options.image_dir}/#{hash}.png", 'w'){|f| f.write(data)}
+      File.open('#{options.image_dir}/#{hash}.png', 'w'){|f| f.write(data)}
 
-      db.xquery("INSERT INTO images (`hash`, `created_at`) VALUES (?, ?)", hash, Time.now)
+      db.xquery('INSERT INTO images (hash, created_at) VALUES (?, ?)', hash, Time.now)
 
-      "#{options.image_url}/#{hash}.png"
+      '#{options.image_url}/#{hash}.png'
+    end
+
+    get '/' do
+      auth = request.env['HTTP_AUTHORIZATION']
+      if auth != 'Bearer ' + options.access_token then
+        return status 403
+      end
+
+      result = db.query('SELECT hash FROM images ORDER BY created_at DESC')
+      result.to_a.map { |e| e['hash'] }.to_json
     end
   end
 end
