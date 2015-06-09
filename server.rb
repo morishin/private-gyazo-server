@@ -36,11 +36,11 @@ module Gyazo
       id = request[:id]
       data = request[:imagedata][:tempfile].read
       hash = Digest::MD5.hexdigest(data).to_s
-      File.open('#{options.image_dir}/#{hash}.png', 'w'){|f| f.write(data)}
+      File.open("#{options.image_dir}/#{hash}.png", 'w'){|f| f.write(data)}
 
       db.xquery('INSERT INTO images (hash, created_at) VALUES (?, ?)', hash, Time.now)
 
-      '#{options.image_url}/#{hash}.png'
+      "#{options.image_url}/#{hash}.png"
     end
 
     get '/' do
