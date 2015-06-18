@@ -5,6 +5,7 @@ require 'sdbm'
 require 'dotenv'
 require 'mysql2-cs-bind'
 require 'json'
+require 'sinatra/cross_origin'
 
 module Gyazo
   class Controller < Sinatra::Base
@@ -14,6 +15,7 @@ module Gyazo
       set :image_dir, 'public'
       set :image_url, ENV['SERVER_URL']
       set :access_token, ENV['ACCESS_TOKEN']
+      enable :cross_origin
     end
 
     helpers do
@@ -44,6 +46,7 @@ module Gyazo
     end
 
     get '/' do
+      cross_origin
       auth = request.env['HTTP_AUTHORIZATION']
       if auth != 'Bearer ' + options.access_token then
         return status 403
