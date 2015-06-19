@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Gyazo History</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script>
+      $(function () {
+        $.ajax({
+          url: "http://g.morishin.me/list",
+          type: "GET",
+          dataType: "json",
+          headers: {
+            "Authorization": "Bearer 8Erh2O4c69pO0wvFZO54K60QNRdck5jU"
+          },
+          complete: function(hashes) {
+            console.log(hashes.responseJSON);
+            var template = $("#image_cell_template").text();
+            var compiled = _.map(hashes.responseJSON, function(hash) {
+              return _.template(template)({"hash": hash});
+            });
+            console.log(compiled)
+            $("#image_list").html(compiled);
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <ul id="image_list"></ul>
+    <script type="text/template" id="image_cell_template">
+      <li class="image_cell"><img src="http://g.morishin.me/<%= hash %>.png"/></li>
+    </script>
+  </body>
+</html>
