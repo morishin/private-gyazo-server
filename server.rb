@@ -11,7 +11,7 @@ module Gyazo
     Dotenv.load
 
     configure do
-      set :image_dir, 'public'
+      set :image_dir, 'public/images'
       set :image_url, ENV['SERVER_URL']
       set :access_token, ENV['ACCESS_TOKEN']
     end
@@ -29,28 +29,36 @@ module Gyazo
 
     post '/upload' do
       auth = request.env['HTTP_AUTHORIZATION']
-      if auth != 'Bearer ' + options.access_token then
+      if auth != 'Bearer ' + settings.access_token then
         return status 403
       end
 
       id = request[:id]
       data = request[:imagedata][:tempfile].read
       hash = Digest::MD5.hexdigest(data).to_s
-      File.open("#{options.image_dir}/#{hash}.png", 'w'){|f| f.write(data)}
+      File.open("#{settings.image_dir}/#{hash}.png", 'w'){|f| f.write(data)}
 
       db.xquery('INSERT INTO images (hash, created_at) VALUES (?, ?)', hash, Time.now)
 
-      "#{options.image_url}/#{hash}.png"
+      "#{settings.image_url}/#{hash}.png"
     end
 
-    get '/' do
+    get '/*.png' do |hash|
+      send_file "#{settings.image_dir}/#{hash}.png"
+    end
+
+    get '/list' do
       auth = request.env['HTTP_AUTHORIZATION']
-      if auth != 'Bearer ' + options.access_token then
+      if auth != 'Bearer ' + settings.access_token then
         return status 403
       end
 
       result = db.query('SELECT hash FROM images ORDER BY created_at DESC')
       result.to_a.map { |e| e['hash'] }.to_json
+    end
+
+    get '/history' do
+      send_file "#{settings.public_dir}/history.html"
     end
   end
 end
