@@ -1,0 +1,9 @@
+#images {
+    width: 100%;
+}
+
+.image {
+    margin: 5px;
+    float: left;
+    list-style: none;
+}
