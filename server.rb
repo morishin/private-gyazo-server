@@ -14,6 +14,7 @@ module Gyazo
       set :image_dir, 'public/images'
       set :image_url, ENV['SERVER_URL']
       set :access_token, ENV['ACCESS_TOKEN']
+      mime_type :png, 'image/png'
     end
 
     helpers do
